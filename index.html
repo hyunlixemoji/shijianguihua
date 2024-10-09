@@ -12,10 +12,16 @@
         .green { background: green; }
         .blue { background: blue; }
         #priorityPrompt { display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 10px; width: 300px; text-align: center; z-index: 100; }
+        .container { margin-bottom: 20px; }
+        .quadrant { margin: 10px; }
     </style>
 </head>
 <body>
-    <h1>小菜の时间规划器</h1>
+    <div class="title-container">
+        <h1 id="title">小菜の时间规划器</h1>
+        <img src="闹钟.png" alt="描述" id="title-image">
+    </div>
+
     <div class="container">
         <input type="text" id="taskInput" placeholder="输入待办事项">
         <input type="number" id="timeInput" placeholder="所需时间（分钟）" min="1">
