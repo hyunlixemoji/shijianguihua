@@ -1,18 +1,25 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: #f0f0f0;
+    background: url('龟兔赛跑.png') repeat; /* 替换为你的图片文件名 */
+    background-size: 10%;
 }
 
-h1 {
-    text-align: center;
-}
-
-.container {
+.title-container, .container, .quadrant-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 20px;
+}
+
+#title {
+    color: #f8f0e3; /* 奶白色 */
+    text-shadow: 1px 1px 0 #4b0082, -1px 1px 0 #4b0082, 1px -1px 0 #4b0082, -1px -1px 0 #4b0082; /* 深紫色轮廓 */
+}
+
+#title-image {
+    width: 9%; 
+    height: auto; /* 自动高度以保持比例 */
+    margin-left: 15px; 
 }
 
 input {
@@ -34,14 +41,10 @@ button {
     border: none; 
 }
 
-button:hover {
-    background-color: #ff69b4;
-}
+button:hover { background-color: #ff69b4; }
 
 .quadrant-container {
-    display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
     min-height: 400px;
 }
 
@@ -70,18 +73,14 @@ li {
     align-items: center;
 }
 
-.dot {
-    margin-right: 10px;
-}
+.dot { margin-right: 10px; }
 
 #tasks5MinList { color: #FFA07A; }
 #tasks10MinList { color: #FFA500; }
 #tasks1HourList { color: #FF6347; }
 #tasksOver1HourList { color: #C71585; }
 
-.quadrant h3 {
-    margin-top: 5px;
-}
+.quadrant h3 { margin-top: 5px; }
 
 @media (max-width: 600px) {
     body { margin: 10px; }
@@ -114,6 +113,4 @@ li {
 .priority-button.green { background-color: #32cd32; }
 .priority-button.blue { background-color: #4682b4; }
 
-.priority-button:hover {
-    opacity: 0.8;
-}
+.priority-button:hover { opacity: 0.8; }
