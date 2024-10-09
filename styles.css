@@ -1,0 +1,107 @@
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f0f0f0; /* 浅灰色背景 */
+}
+
+h1 {
+    text-align: center; /* 标题居中 */
+}
+
+.container {
+    text-align: center; /* 使内容居中 */
+    margin-bottom: 20px; /* 按钮与其他内容之间的间距 */
+}
+
+input {
+    display: inline-block; /* 使输入框和按钮在同一行 */
+    width: 200px; /* 输入框的宽度 */
+    padding: 10px; /* 添加内边距 */
+    border-radius: 5px; /* 圆角边框 */
+    border: 1px solid #ccc; /* 边框样式 */
+    margin-right: 10px; /* 输入框和按钮之间的间距 */
+}
+
+button {
+    display: inline-block; /* 使按钮在同一行 */
+    width: 60px; /* 设置按钮宽度为60px */
+    height: 60px; /* 设置按钮高度为60px */
+    border-radius: 50%; /* 将按钮变为正圆形 */
+    border: none; /* 去掉边框 */
+    background-color: #ffb6c1; /* 浅粉色 */
+    color: white; /* 字体颜色 */
+    cursor: pointer; /* 鼠标悬停时显示为手型 */
+    transition: background-color 0.3s; /* 添加过渡效果 */
+    vertical-align: middle; /* 垂直对齐 */
+}
+
+button:hover {
+     background-color: #ff69b4; /* 悬停时按钮颜色变化 */
+}
+
+.quadrant-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    position: relative;
+    min-height: 400px; /* 保持容器的最小高度 */
+    min-width: 400px; /* 保持容器的最小宽度 */
+}
+
+.quadrant {
+    box-sizing: border-box;
+    width: 46%; /* 每个象限占46%宽度 */
+    min-height: 180px; /* 保持象限的最小高度 */
+    padding: 10px;
+    margin: 10px 2%; /* 上下间距为10px，左右间距为2% */
+    overflow-wrap: break-word; /* 自动换行 */
+    word-wrap: break-word; /* 兼容旧版浏览器 */
+}
+
+#q1 {
+    background-color: #ffe4e1; /* 第一象限背景色 */
+}
+
+#q2 {
+    background-color: #e6e6fa; /* 第二象限背景色 */
+}
+
+#q3 {
+    background-color: #f0e68c; /* 第三象限背景色 */
+}
+
+#q4 {
+    background-color: #add8e6; /* 第四象限背景色 */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    cursor: pointer;
+    margin: 5px 0;
+}
+
+/* 分类标题颜色 */
+#tasks5MinList {
+    color: #FFA07A; /* 浅橙色 */
+}
+
+#tasks10MinList {
+    color: #FFA500; /* 橙色 */
+}
+
+#tasks1HourList {
+    color: #FF6347; /* 浅红色 */
+}
+
+#tasksOver1HourList {
+    color: #C71585; /* 玫红色 */
+}
+
+/* 调整分类标题的位置 */
+.quadrant h3 {
+    margin-top: 5px; /* 调整标题的上边距 */
+}

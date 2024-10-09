@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小菜の时间规划器</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>小菜の时间规划器</h1>
+    <div class="container">
+        <input type="text" id="taskInput" placeholder="输入待办事项">
+        <input type="number" id="timeInput" placeholder="所需时间（分钟）" min="1">
+        <button id="addTaskBtn">添加事项</button>
+    </div>
+
+    <div class="quadrant-container">
+        <div class="quadrant" id="q1">
+            <h3>5分钟</h3>
+            <ul id="tasks5MinList"></ul>
+        </div>
+        <div class="quadrant" id="q2">
+            <h3>1小时</h3>
+            <ul id="tasks1HourList"></ul>
+        </div>
+        <div class="quadrant" id="q3">
+            <h3>10分钟</h3>
+            <ul id="tasks10MinList"></ul>
+        </div>
+        <div class="quadrant" id="q4">
+            <h3>1小时以上</h3>
+            <ul id="tasksOver1HourList"></ul>
+        </div>
+    </div>
+
+    <div class="axes">
+        <div class="horizontal-axis"></div>
+        <div class="vertical-axis"></div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
