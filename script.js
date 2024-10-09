@@ -1,74 +1,73 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // 加载已保存的任务
+document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
 
-    document.getElementById('addTaskBtn').addEventListener('click', function() {
+    document.getElementById('addTaskBtn').addEventListener('click', () => {
         const taskInput = document.getElementById('taskInput').value.trim();
         const timeInput = parseInt(document.getElementById('timeInput').value);
 
         if (taskInput && !isNaN(timeInput)) {
-            // 创建新的待办事项
-            const task = {
-                name: taskInput,
-                time: timeInput
-            };
-            addTaskToList(task);
-            saveTask(task); // 保存任务到本地存储
-
-            // 清空输入框
-            document.getElementById('taskInput').value = '';
-            document.getElementById('timeInput').value = '';
+            showPriorityPrompt(taskInput, timeInput);
         } else {
             alert('请填写有效的待办事项和时间');
         }
     });
 });
 
+// 显示优先级选择提示框
+function showPriorityPrompt(taskInput, timeInput) {
+    const promptBox = document.getElementById('priorityPrompt');
+    promptBox.style.display = 'block';
+    const priorityMap = { '1': 'red', '2': 'yellow', '3': 'green', '4': 'blue' };
+
+    const selectPriority = (priority) => {
+        const dotClass = priorityMap[priority];
+        if (!dotClass) return alert('无效的选择');
+
+        const task = { name: taskInput, time: timeInput, dotClass };
+        addTaskToList(task);
+        saveTask(task);
+        document.getElementById('taskInput').value = '';
+        document.getElementById('timeInput').value = '';
+        promptBox.style.display = 'none';
+    };
+
+    ['1', '2', '3', '4'].forEach(priority => {
+        document.getElementById(`priority${priority}`).onclick = () => selectPriority(priority);
+    });
+}
+
 // 添加待办事项到相应列表
 function addTaskToList(task) {
-    let listId;
-
-    // 根据时间分类
-    if (task.time <= 5) {
-        listId = 'tasks5MinList';
-    } else if (task.time <= 10) {
-        listId = 'tasks10MinList';
-    } else if (task.time <= 60) {
-        listId = 'tasks1HourList';
-    } else {
-        listId = 'tasksOver1HourList';
-    }
+    const listId = task.time <= 5 ? 'tasks5MinList' :
+                   task.time <= 10 ? 'tasks10MinList' :
+                   task.time <= 60 ? 'tasks1HourList' : 'tasksOver1HourList';
 
     const li = document.createElement('li');
-    li.textContent = task.name + ' (' + task.time + ' 分钟)';
+    li.innerHTML = `<span class="dot ${task.dotClass}"></span>${task.name} (${task.time} 分钟)`;
     
-    // 点击待办事项时标记为完成
-    li.addEventListener('click', function() {
-        li.style.textDecoration = 'line-through'; // 划去已完成事项
-        setTimeout(() => li.remove(), 2000); // 2秒后移除
-        removeTaskFromStorage(task); // 从本地存储中删除
-    });
+    li.onclick = () => {
+        li.style.textDecoration = 'line-through';
+        setTimeout(() => li.remove(), 2000);
+        removeTaskFromStorage(task);
+    };
 
-    // 添加到相应列表
     document.getElementById(listId).appendChild(li);
 }
 
 // 保存任务到本地存储
 function saveTask(task) {
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks.push(task);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    localStorage.setItem('tasks', JSON.stringify([...tasks, task]));
 }
 
 // 从本地存储中删除任务
 function removeTaskFromStorage(task) {
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks = tasks.filter(t => t.name !== task.name || t.time !== task.time);
-    localStorage.setItem('tasks', JSON.stringify(tasks));
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    localStorage.setItem('tasks', JSON.stringify(tasks.filter(t => t.name !== task.name || t.time !== task.time)));
 }
 
 // 加载已保存的任务
 function loadTasks() {
-    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks.forEach(task => addTaskToList(task));
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks.forEach(addTaskToList);
 }
