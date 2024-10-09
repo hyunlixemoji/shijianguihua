@@ -1,132 +1,119 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background-color: #f0f0f0; /* 浅灰色背景 */
+    background-color: #f0f0f0;
 }
 
 h1 {
-    text-align: center; /* 标题居中 */
+    text-align: center;
 }
 
 .container {
-    text-align: center; /* 使内容居中 */
-    margin-bottom: 20px; /* 按钮与其他内容之间的间距 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
 input {
-    display: inline-block; /* 使输入框和按钮在同一行 */
-    width: 200px; /* 输入框的宽度 */
-    padding: 10px; /* 添加内边距 */
-    border-radius: 5px; /* 圆角边框 */
-    border: 1px solid #ccc; /* 边框样式 */
-    margin-right: 10px; /* 输入框和按钮之间的间距 */
+    width: 200px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
 }
 
 button {
-    display: inline-block; /* 使按钮在同一行 */
-    width: 60px; /* 设置按钮宽度为60px */
-    height: 60px; /* 设置按钮高度为60px */
-    border-radius: 50%; /* 将按钮变为正圆形 */
-    border: none; /* 去掉边框 */
-    background-color: #ffb6c1; /* 浅粉色 */
-    color: white; /* 字体颜色 */
-    cursor: pointer; /* 鼠标悬停时显示为手型 */
-    transition: background-color 0.3s; /* 添加过渡效果 */
-    vertical-align: middle; /* 垂直对齐 */
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background-color: #ffb6c1;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border: none; 
 }
 
 button:hover {
-    background-color: #ff69b4; /* 悬停时按钮颜色变化 */
+    background-color: #ff69b4;
 }
 
 .quadrant-container {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    position: relative;
-    min-height: 400px; /* 保持容器的最小高度 */
+    min-height: 400px;
 }
 
 .quadrant {
     box-sizing: border-box;
-    width: 46%; /* 每个象限占46%宽度 */
-    min-height: 180px; /* 保持象限的最小高度 */
+    width: 46%;
+    min-height: 180px;
     padding: 10px;
-    margin: 10px 2%; /* 上下间距为10px，左右间距为2% */
-    overflow-wrap: break-word; /* 自动换行 */
-    word-wrap: break-word; /* 兼容旧版浏览器 */
+    margin: 10px 2%;
 }
 
-#q1 {
-    background-color: #ffe4e1; /* 第一象限背景色 */
-}
-
-#q2 {
-    background-color: #e6e6fa; /* 第二象限背景色 */
-}
-
-#q3 {
-    background-color: #f0e68c; /* 第三象限背景色 */
-}
-
-#q4 {
-    background-color: #add8e6; /* 第四象限背景色 */
-}
+#q1 { background-color: #ffe4e1; }
+#q2 { background-color: #e6e6fa; }
+#q3 { background-color: #f0e68c; }
+#q4 { background-color: #add8e6; }
 
 ul {
-    list-style-type: none;
+    list-style: none;
     padding: 0;
 }
 
 li {
     cursor: pointer;
     margin: 5px 0;
+    display: flex;
+    align-items: center;
 }
 
-/* 分类标题颜色 */
-#tasks5MinList {
-    color: #FFA07A; /* 浅橙色 */
+.dot {
+    margin-right: 10px;
 }
 
-#tasks10MinList {
-    color: #FFA500; /* 橙色 */
-}
+#tasks5MinList { color: #FFA07A; }
+#tasks10MinList { color: #FFA500; }
+#tasks1HourList { color: #FF6347; }
+#tasksOver1HourList { color: #C71585; }
 
-#tasks1HourList {
-    color: #FF6347; /* 浅红色 */
-}
-
-#tasksOver1HourList {
-    color: #C71585; /* 玫红色 */
-}
-
-/* 调整分类标题的位置 */
 .quadrant h3 {
-    margin-top: 5px; /* 调整标题的上边距 */
+    margin-top: 5px;
 }
 
-/* 媒体查询：适应手机屏幕 */
 @media (max-width: 600px) {
-    body {
-        margin: 10px; /* 缩小边距 */
-    }
+    body { margin: 10px; }
+    input { width: calc(100% - 22px); margin-right: 0; }
+    button { width: 50px; height: 50px; }
+    .quadrant { width: 100%; margin: 10px 0; }
+    .quadrant-container { flex-direction: column; }
+}
 
-    input {
-        width: calc(100% - 22px); /* 使输入框适应屏幕宽度 */
-        margin-right: 0; /* 取消右边距 */
-    }
+#priorityPrompt {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
 
-    button {
-        width: 50px; /* 调整按钮宽度 */
-        height: 50px; /* 调整按钮高度 */
-    }
+.priority-button {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    border-radius: 10px;
+}
 
-    .quadrant {
-        width: 100%; /* 每个象限占100%宽度 */
-        margin: 10px 0; /* 上下间距 */
-    }
+.priority-button.red { background-color: #ff4500; }
+.priority-button.yellow { background-color: #ffd700; }
+.priority-button.green { background-color: #32cd32; }
+.priority-button.blue { background-color: #4682b4; }
 
-    .quadrant-container {
-        flex-direction: column; /* 列方向排列 */
-    }
+.priority-button:hover {
+    opacity: 0.8;
 }
