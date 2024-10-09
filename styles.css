@@ -36,7 +36,7 @@ button {
 }
 
 button:hover {
-     background-color: #ff69b4; /* 悬停时按钮颜色变化 */
+    background-color: #ff69b4; /* 悬停时按钮颜色变化 */
 }
 
 .quadrant-container {
@@ -45,7 +45,6 @@ button:hover {
     justify-content: space-between;
     position: relative;
     min-height: 400px; /* 保持容器的最小高度 */
-    min-width: 400px; /* 保持容器的最小宽度 */
 }
 
 .quadrant {
@@ -104,4 +103,30 @@ li {
 /* 调整分类标题的位置 */
 .quadrant h3 {
     margin-top: 5px; /* 调整标题的上边距 */
+}
+
+/* 媒体查询：适应手机屏幕 */
+@media (max-width: 600px) {
+    body {
+        margin: 10px; /* 缩小边距 */
+    }
+
+    input {
+        width: calc(100% - 22px); /* 使输入框适应屏幕宽度 */
+        margin-right: 0; /* 取消右边距 */
+    }
+
+    button {
+        width: 50px; /* 调整按钮宽度 */
+        height: 50px; /* 调整按钮高度 */
+    }
+
+    .quadrant {
+        width: 100%; /* 每个象限占100%宽度 */
+        margin: 10px 0; /* 上下间距 */
+    }
+
+    .quadrant-container {
+        flex-direction: column; /* 列方向排列 */
+    }
 }
