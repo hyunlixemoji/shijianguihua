@@ -17,22 +17,21 @@ document.addEventListener('DOMContentLoaded', () => {
 function showPriorityPrompt(taskInput, timeInput) {
     const promptBox = document.getElementById('priorityPrompt');
     promptBox.style.display = 'block';
+
     const priorityMap = { '1': 'red', '2': 'yellow', '3': 'green', '4': 'blue' };
 
-    const selectPriority = (priority) => {
-        const dotClass = priorityMap[priority];
-        if (!dotClass) return alert('无效的选择');
-
-        const task = { name: taskInput, time: timeInput, dotClass };
-        addTaskToList(task);
-        saveTask(task);
-        document.getElementById('taskInput').value = '';
-        document.getElementById('timeInput').value = '';
-        promptBox.style.display = 'none';
-    };
-
     ['1', '2', '3', '4'].forEach(priority => {
-        document.getElementById(`priority${priority}`).onclick = () => selectPriority(priority);
+        document.getElementById(`priority${priority}`).onclick = () => {
+            const dotClass = priorityMap[priority];
+            if (!dotClass) return alert('无效的选择');
+
+            const task = { name: taskInput, time: timeInput, dotClass };
+            addTaskToList(task);
+            saveTask(task);
+            document.getElementById('taskInput').value = '';
+            document.getElementById('timeInput').value = '';
+            promptBox.style.display = 'none';
+        };
     });
 }
 
@@ -44,7 +43,7 @@ function addTaskToList(task) {
 
     const li = document.createElement('li');
     li.innerHTML = `<span class="dot ${task.dotClass}"></span>${task.name} (${task.time} 分钟)`;
-    
+
     li.onclick = () => {
         li.style.textDecoration = 'line-through';
         setTimeout(() => li.remove(), 2000);
@@ -57,7 +56,8 @@ function addTaskToList(task) {
 // 保存任务到本地存储
 function saveTask(task) {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    localStorage.setItem('tasks', JSON.stringify([...tasks, task]));
+    tasks.push(task);
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 // 从本地存储中删除任务
