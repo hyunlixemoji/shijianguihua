@@ -1,29 +1,39 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background: url('龟兔赛跑.png') repeat; /* 替换为你的图片文件名 */
+    background: url('龟兔赛跑.png') repeat;
     background-size: 10%;
 }
 
-.title-container, .container, .quadrant-container {
+.container, .quadrant-container {
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-wrap: wrap; /* 允许换行 */
+}
+
+.title-container {
+    position: relative;
+    text-align: center;
 }
 
 #title {
-    color: #f8f0e3; /* 奶白色 */
-    text-shadow: 1px 1px 0 #4b0082, -1px 1px 0 #4b0082, 1px -1px 0 #4b0082, -1px -1px 0 #4b0082; /* 深紫色轮廓 */
+    color: #f8f0e3; 
+    text-shadow: 1px 1px 0 #4b0082, -1px 1px 0 #4b0082, 1px -1px 0 #4b0082, -1px -1px 0 #4b0082;
+    display: inline-block;
 }
 
-#title-image {
-    width: 9%; 
-    height: auto; /* 自动高度以保持比例 */
-    margin-left: 15px; 
-}
+.title-image {
+    position: absolute;
+    right: 20%;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10%;
+}  
 
 input {
-    width: 200px;
+    width: 100%; /* 使用百分比宽度 */
+    max-width: 200px; /* 最大宽度 */
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -41,19 +51,22 @@ button {
     border: none; 
 }
 
-button:hover { background-color: #ff69b4; }
+button:hover { 
+    background-color: #ff69b4; 
+}
 
 .quadrant-container {
+    display: flex;
     flex-wrap: wrap;
     min-height: 400px;
+    gap: 20px;
 }
 
 .quadrant {
     box-sizing: border-box;
-    width: 46%;
+    width: calc(45% - 20px); /* 减去间隔 */
     min-height: 180px;
     padding: 10px;
-    margin: 10px 2%;
 }
 
 #q1 { background-color: #ffe4e1; }
@@ -73,7 +86,9 @@ li {
     align-items: center;
 }
 
-.dot { margin-right: 10px; }
+.dot { 
+    margin-right: 10px; 
+}
 
 #tasks5MinList { color: #FFA07A; }
 #tasks10MinList { color: #FFA500; }
