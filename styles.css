@@ -21,11 +21,12 @@ body {
     color: #f8f0e3; 
     text-shadow: 1px 1px 0 #4b0082, -1px 1px 0 #4b0082, 1px -1px 0 #4b0082, -1px -1px 0 #4b0082;
     display: inline-block;
+    position: relative;
 }
 
 .title-image {
     position: absolute;
-    right: 10%;
+    right: 20%;
     top: 50%;
     transform: translateY(-50%);
     width: 10%;
