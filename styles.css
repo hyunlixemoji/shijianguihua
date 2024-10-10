@@ -3,38 +3,42 @@ body {
     margin: 20px;
     background: url('龟兔赛跑.png') repeat;
     background-size: 10%;
+    height: 100vh;
 }
 
 .container, .quadrant-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-wrap: wrap; /* 允许换行 */
+    flex-wrap: wrap;
 }
 
-.title-container {
-    position: relative;
-    text-align: center;
+#title-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 50px;
 }
 
 #title {
     color: #f8f0e3; 
     text-shadow: 1px 1px 0 #4b0082, -1px 1px 0 #4b0082, 1px -1px 0 #4b0082, -1px -1px 0 #4b0082;
-    display: inline-block;
-    position: relative;
+    margin: 0;
+    padding-right: 5px;
+    font-size: 2em;
+}
+
+.image-container {
+    width: 60px;
 }
 
 .title-image {
-    position: absolute;
-    right: 20%;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 10%;
-}  
+    width: 100%;
+}
 
 input {
-    width: 100%; /* 使用百分比宽度 */
-    max-width: 200px; /* 最大宽度 */
+    width: 100%;
+    max-width: 200px;
     padding: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
@@ -52,20 +56,16 @@ button {
     border: none; 
 }
 
-button:hover { 
-    background-color: #ff69b4; 
-}
+button:hover { background-color: #ff69b4; }
 
 .quadrant-container {
-    display: flex;
-    flex-wrap: wrap;
     min-height: 400px;
     gap: 20px;
 }
 
 .quadrant {
     box-sizing: border-box;
-    width: calc(45% - 20px); /* 减去间隔 */
+    width: calc(45% - 20px);
     min-height: 180px;
     padding: 10px;
 }
@@ -87,9 +87,7 @@ li {
     align-items: center;
 }
 
-.dot { 
-    margin-right: 10px; 
-}
+.dot { margin-right: 10px; }
 
 #tasks5MinList { color: #FFA07A; }
 #tasks10MinList { color: #FFA500; }
@@ -100,6 +98,12 @@ li {
 
 @media (max-width: 600px) {
     body { margin: 10px; }
+    #title-container {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    #title { font-size: 1.5em; }
+    .image-container { max-width: 50px; }
     input { width: calc(100% - 22px); margin-right: 0; }
     button { width: 50px; height: 50px; }
     .quadrant { width: 100%; margin: 10px 0; }
@@ -120,8 +124,8 @@ li {
     color: white;
     cursor: pointer;
     font-size: 16px;
-    transition: background-color 0.3s;
     border-radius: 10px;
+    transition: background-color 0.3s;
 }
 
 .priority-button.red { background-color: #ff4500; }
