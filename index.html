@@ -7,10 +7,6 @@
     <link rel="stylesheet" href="styles.css">
     <style>
         .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
-        .red { background: red; }
-        .yellow { background: yellow; }
-        .green { background: green; }
-        .blue { background: blue; }
         #priorityPrompt { display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 10px; width: 300px; text-align: center; z-index: 100; }
         .container, .quadrant { margin: 10px 0; }
         .title-image { width: 60px; }
@@ -21,40 +17,26 @@
         <h1 id="title">小菜の时间规划器</h1>
         <img src="闹钟.png" class="title-image" alt="闹钟" />
     </div>
-
     <div class="container">
         <input type="text" id="taskInput" placeholder="输入待办事项">
         <input type="number" id="timeInput" placeholder="所需时间（分钟）" min="1">
         <button id="addTaskBtn">添加事项</button>
     </div>
-
     <div id="priorityPrompt">
         <p>请选择优先级</p>
-        <button class="priority-button red" id="priority1">1.重要且紧急</button>
-        <button class="priority-button yellow" id="priority2">2.重要不紧急</button>
-        <button class="priority-button green" id="priority3">3.不重要紧急</button>
-        <button class="priority-button blue" id="priority4">4.不重要不紧急</button>
+        <div>
+            <button class="priority-button red" id="priority1">1.重要且紧急</button>
+            <button class="priority-button yellow" id="priority2">2.重要不紧急</button>
+            <button class="priority-button green" id="priority3">3.不重要紧急</button>
+            <button class="priority-button blue" id="priority4">4.不重要不紧急</button>
+        </div>
     </div>
-
     <div class="quadrant-container">
-        <div class="quadrant" id="q1">
-            <h3>5分钟</h3>
-            <ul id="tasks5MinList"></ul>
-        </div>
-        <div class="quadrant" id="q3">
-            <h3>10分钟</h3>
-            <ul id="tasks10MinList"></ul>
-        </div>
-        <div class="quadrant" id="q2">
-            <h3>1小时</h3>
-            <ul id="tasks1HourList"></ul>
-        </div>
-        <div class="quadrant" id="q4">
-            <h3>1小时以上</h3>
-            <ul id="tasksOver1HourList"></ul>
-        </div>
+        <div class="quadrant" id="q1"><h3>5分钟</h3><ul id="tasks5MinList"></ul></div>
+        <div class="quadrant" id="q3"><h3>10分钟</h3><ul id="tasks10MinList"></ul></div>
+        <div class="quadrant" id="q2"><h3>1小时</h3><ul id="tasks1HourList"></ul></div>
+        <div class="quadrant" id="q4"><h3>1小时以上</h3><ul id="tasksOver1HourList"></ul></div>
     </div>
-
     <script src="script.js"></script>
 </body>
 </html>
