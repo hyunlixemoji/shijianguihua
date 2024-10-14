@@ -3,7 +3,6 @@ body {
     margin: 20px;
     background: url('龟兔赛跑.png') repeat;
     background-size: 10%; /* 将背景图缩小为10% */
-    height: 100vh;
 }
 
 .container, .quadrant-container {
@@ -15,7 +14,7 @@ body {
 }
 
 #title {
-    color: #f8f0e3; text-shadow: 1px 1px 0 #4b0082; margin: 0; padding-right: 5px; font-size: 2em; white-space: nowrap;
+    color: #f8f0e3; text-shadow: 1px 1px 0 #4b0082; margin: 0; padding-right: 5px; font-size: 2em; white-space: nowrap; 
 }
 
 input { width: 100%; max-width: 200px; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-right: 10px; }
