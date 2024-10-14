@@ -1,7 +1,8 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
-    background: url('龟兔赛跑.png') repeat 10% 10%;
+    background: url('龟兔赛跑.png') repeat;
+    background-size: 10%; /* 将背景图缩小为10% */
     height: 100vh;
 }
 
