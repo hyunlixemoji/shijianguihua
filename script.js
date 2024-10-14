@@ -13,7 +13,8 @@ function showPriorityPrompt(taskInput, timeInput) {
     promptBox.style.display = 'block';
     ['1', '2', '3', '4'].forEach(priority => {
         document.getElementById(`priority${priority}`).onclick = () => {
-            const dotClass = ['red', 'yellow', 'green', 'blue'][priority - 1];
+            const priorityLabels = ['red', 'yellow', 'green', 'blue'];
+            const dotClass = priorityLabels[priority - 1];
             addTaskToList({ name: taskInput, time: timeInput, dotClass });
             saveTask({ name: taskInput, time: timeInput, dotClass });
             document.getElementById('taskInput').value = '';
@@ -29,8 +30,29 @@ function addTaskToList(task) {
                    task.time <= 60 ? 'tasks1HourList' : 'tasksOver1HourList';
     const li = document.createElement('li');
     li.innerHTML = `<span class="dot ${task.dotClass}"></span>${task.name} (${task.time} 分钟)`;
-    li.onclick = () => { li.style.textDecoration = 'line-through'; setTimeout(() => li.remove(), 2000); removeTaskFromStorage(task); };
+    li.style.wordWrap = 'break-word';  // 支持自动换行
+    li.ondblclick = () => {
+        li.style.textDecoration = 'line-through';
+        setTimeout(() => li.remove(), 2000);
+        removeTaskFromStorage(task);
+    };
+    li.oncontextmenu = (event) => {
+        event.preventDefault();  // 防止右键菜单
+        const taskData = prompt('修改待办事项 (格式: 内容,时间)', `${task.name},${task.time}`);
+        if (taskData) {
+            const [newName, newTime] = taskData.split(',');
+            if (newName && !isNaN(newTime)) {
+                updateTask(li, { name: newName.trim(), time: parseInt(newTime), dotClass: task.dotClass });
+            } else {
+                alert('无效的输入');
+            }
+        }
+    };
     document.getElementById(listId).appendChild(li);
+}
+
+function updateTask(li, task) {
+    li.innerHTML = `<span class="dot ${task.dotClass}"></span>${task.name} (${task.time} 分钟)`;
 }
 
 function saveTask(task) {
