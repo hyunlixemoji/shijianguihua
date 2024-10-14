@@ -10,6 +10,7 @@
         #priorityPrompt { display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 10px; width: 300px; text-align: center; z-index: 100; }
         .container, .quadrant { margin: 10px 0; }
         .title-image { width: 60px; }
+        li { word-wrap: break-word; max-width: 100%; } /* 确保待办事项自动换行 */
     </style>
 </head>
 <body>
@@ -31,6 +32,7 @@
             <button class="priority-button blue" id="priority4">不重要不紧急</button>
         </div>
     </div>
+
     <div class="quadrant-container">
         <div class="quadrant" id="q1"><h3>5分钟</h3><ul id="tasks5MinList"></ul></div>
         <div class="quadrant" id="q3"><h3>10分钟</h3><ul id="tasks10MinList"></ul></div>
@@ -38,5 +40,5 @@
         <div class="quadrant" id="q4"><h3>1小时以上</h3><ul id="tasksOver1HourList"></ul></div>
     </div>
     <script src="script.js"></script>
-</body>
+    </body>
 </html>
