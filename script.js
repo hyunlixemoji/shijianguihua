@@ -31,18 +31,20 @@ function addTaskToList(task) {
     const li = document.createElement('li');
     li.innerHTML = `<span class="dot ${task.dotClass}"></span>${task.name} (${task.time} 分钟)`;
     li.style.wordWrap = 'break-word';  // 支持自动换行
-    li.ondblclick = () => {
-        li.style.textDecoration = 'line-through';
-        setTimeout(() => li.remove(), 2000);
-        removeTaskFromStorage(task);
+    li.onclick = (event) => {
+        if (event.detail === 2) { // 双击事件
+            li.style.textDecoration = 'line-through';
+            setTimeout(() => li.remove(), 2000);
+            removeTaskFromStorage(task);
+        }
     };
     li.oncontextmenu = (event) => {
-        event.preventDefault();  // 防止右键菜单
-        const taskData = prompt('修改待办事项 (格式: 内容,时间)', `${task.name},${task.time}`);
+        event.preventDefault(); // 防止右键菜单
+        const taskData = prompt('修改待办事项 (格式: 内容,所需时间,优先级)', `${task.name},${task.time},${task.dotClass}`);
         if (taskData) {
-            const [newName, newTime] = taskData.split(',');
-            if (newName && !isNaN(newTime)) {
-                updateTask(li, { name: newName.trim(), time: parseInt(newTime), dotClass: task.dotClass });
+            const [newName, newTime, newPriority] = taskData.split(',');
+            if (newName && !isNaN(newTime) && ['red', 'yellow', 'green', 'blue'].includes(newPriority)) {
+                updateTask(li, { name: newName.trim(), time: parseInt(newTime), dotClass: newPriority });
             } else {
                 alert('无效的输入');
             }
