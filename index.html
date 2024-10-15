@@ -6,11 +6,12 @@
     <title>小菜の时间规划器</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* 样式保持不变 */
         .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
         #priorityPrompt { display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 10px; width: 300px; text-align: center; z-index: 100; left: 50%; transform: translateX(-50%); }
         .container, .quadrant { margin: 10px 0; }
         .title-image { width: 60px; }
-        li { word-wrap: break-word; max-width: 100%; } /* 确保待办事项自动换行 */
+        li { word-wrap: break-word; max-width: 100%; }
     </style>
 </head>
 <body>
@@ -39,8 +40,7 @@
         <div class="quadrant" id="q2"><h3>1小时</h3><ul id="tasks1HourList"></ul></div>
         <div class="quadrant" id="q4"><h3>1小时以上</h3><ul id="tasksOver1HourList"></ul></div>
     </div>
-    
-    <!-- 弹出窗口 -->
+
     <div id="editTaskPrompt" style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:#fff; border:1px solid #ccc; padding:20px; z-index:150;">
         <h4>修改任务</h4>
         <input type="text" id="editTaskName" placeholder="内容" />
@@ -54,7 +54,7 @@
         <button id="saveEditButton">保存</button>
         <button id="cancelEditButton">取消</button>
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>
