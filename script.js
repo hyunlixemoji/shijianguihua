@@ -1,35 +1,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadTasks();
+
     document.getElementById('addTaskBtn').addEventListener('click', () => {
         const taskInput = document.getElementById('taskInput').value.trim();
         const timeInput = parseInt(document.getElementById('timeInput').value);
-        if (taskInput && !isNaN(timeInput)) showPriorityPrompt(taskInput, timeInput);
-        else alert('请填写有效的待办事项和时间');
-    });
-
-    // 添加双击事件修改
-    document.querySelectorAll('.quadrant li').forEach(li => {
-        li.oncontextmenu = (event) => {
-            event.preventDefault(); // 防止右键菜单
-            
-            // 显示编辑弹出框
-            const editPrompt = document.getElementById('editTaskPrompt');
-            editPrompt.style.display = 'block';
-
-            // 填充编辑框
-            document.getElementById('editTaskName').value = li.innerText.split(' (')[0]; // 获取任务内容
-            document.getElementById('editTaskTime').value = li.innerText.split('(')[1].split('分钟')[0]; // 获取时间
-            let priorityClass;
-            const dot = li.querySelector('.dot');
-            if (dot.style.backgroundColor === 'rgb(255, 69, 0)') priorityClass = 'red';
-            else if (dot.style.backgroundColor === 'rgb(255, 215, 0)') priorityClass = 'yellow';
-            else if (dot.style.backgroundColor === 'rgb(50, 205, 50)') priorityClass = 'green';
-            else if (dot.style.backgroundColor === 'rgb(70, 130, 180)') priorityClass = 'blue';
-            document.getElementById('editTaskPriority').value = priorityClass; // 设置优先级
-
-            // 保存引用到当前li元素用于更新
-            editPrompt.dataset.currentLi = li.outerHTML; // 保存原始DOM用于后续更新
-        };
+        if (taskInput && !isNaN(timeInput)) {
+            showPriorityPrompt(taskInput, timeInput);
+        } else {
+            alert('请填写有效的待办事项和时间');
+        }
     });
 
     document.getElementById('saveEditButton').onclick = () => {
@@ -37,61 +16,76 @@ document.addEventListener('DOMContentLoaded', () => {
         const time = parseInt(document.getElementById('editTaskTime').value);
         const priority = document.getElementById('editTaskPriority').value;
 
-        // 找到当前要更新的li元素
-        const liElements = document.querySelectorAll('.quadrant li');
-        let currentLi;
-        liElements.forEach(li => {
-            if (li.outerHTML === editPrompt.dataset.currentLi) {
-                currentLi = li; // 找到对应的li元素
-            }
-        });
-
-        const dotClass = priority; // 使用选择的优先级
-
-        if (name && !isNaN(time) && ['red', 'yellow', 'green', 'blue'].includes(dotClass)) {
-            updateTask(currentLi, { name, time, dotClass }); // 更新待办事项
-            saveTask({ name, time, dotClass }); // 同步更新本地存储
-            document.getElementById('editTaskPrompt').style.display = 'none'; // 关闭弹窗
+        if (name && !isNaN(time) && ['red', 'yellow', 'green', 'blue'].includes(priority)) {
+            updateTask(currentLi, { name, time, priority });
+            closeEditPrompt();
         } else {
             alert('请填写有效的信息');
         }
     };
 
-    // 取消编辑
-    document.getElementById('cancelEditButton').onclick = () => {
-        document.getElementById('editTaskPrompt').style.display = 'none';
-    };
+    document.getElementById('cancelEditButton').onclick = closeEditPrompt;
 });
+
+let currentLi; 
+
+function closeEditPrompt() {
+    document.getElementById('editTaskPrompt').style.display = 'none';
+}
+
+function showEditPrompt(li) {
+    currentLi = li; 
+    document.getElementById('editTaskName').value = li.innerText.split(' (')[0]; 
+    document.getElementById('editTaskTime').value = parseInt(li.innerText.match(/\((\d+) 分钟\)/)[1]); 
+
+    const dot = li.querySelector('.dot');
+    const priority = getPriorityFromDotColor(dot.style.backgroundColor);
+    document.getElementById('editTaskPriority').value = priority; 
+    document.getElementById('editTaskPrompt').style.display = 'block'; 
+}
+
+function getPriorityFromDotColor(color) {
+    if (color === 'rgb(255, 69, 0)') return 'red';
+    if (color === 'rgb(255, 215, 0)') return 'yellow';
+    if (color === 'rgb(50, 205, 50)') return 'green';
+    if (color === 'rgb(70, 130, 180)') return 'blue';
+    return 'red';
+}
 
 function showPriorityPrompt(taskInput, timeInput) {
     const promptBox = document.getElementById('priorityPrompt');
     promptBox.style.display = 'block';
-    ['1', '2', '3', '4'].forEach(priority => {
-        document.getElementById(`priority${priority}`).onclick = () => {
-            const priorityLabels = ['red', 'yellow', 'green', 'blue'];
-            const dotClass = priorityLabels[priority - 1];
-            addTaskToList({ name: taskInput, time: timeInput, dotClass });
-            saveTask({ name: taskInput, time: timeInput, dotClass });
+    const priorityButtons = document.querySelectorAll('#priorityPrompt button');
+    priorityButtons.forEach((button, idx) => {
+        button.onclick = (() => {
+            const priority = getPriorityByIdx(idx);
+            const task = { name: taskInput, time: timeInput, priority };
+            addTaskToList(task);
+            saveTask(task);
             document.getElementById('taskInput').value = '';
             document.getElementById('timeInput').value = '';
             promptBox.style.display = 'none';
-        };
+        });
     });
 }
 
 function addTaskToList(task) {
-    const listId = task.time <= 5 ? 'tasks5MinList' :
-                   task.time <= 10 ? 'tasks10MinList' :
-                   task.time <= 60 ? 'tasks1HourList' : 'tasksOver1HourList';
+    const listId = getTaskListId(task.time);
     const li = document.createElement('li');
-    li.innerHTML = `<span class="dot" style="background-color: ${getColorByPriority(task.dotClass)};"></span>${task.name} (${task.time} 分钟)`;
-    li.style.wordWrap = 'break-word';  // 支持自动换行
+    li.innerHTML = `<span class="dot" style="background-color: ${getColorByPriority(task.priority)};"></span>${task.name} (${task.time} 分钟)`;
+    
+    li.oncontextmenu = (event) => {
+        event.preventDefault(); 
+        showEditPrompt(li); 
+    };
 
     li.onclick = (event) => {
-        if (event.detail === 2) { // 双击事件
+        if (event.detail === 2) { 
             li.style.textDecoration = 'line-through';
-            setTimeout(() => li.remove(), 2000);
-            removeTaskFromStorage(task);
+            setTimeout(() => {
+                li.remove();
+                removeTaskFromStorage(task);
+            }, 2000);
         }
     };
 
@@ -99,11 +93,37 @@ function addTaskToList(task) {
 }
 
 function updateTask(li, task) {
-    li.innerHTML = `<span class="dot" style="background-color: ${getColorByPriority(task.dotClass)};"></span>${task.name} (${task.time} 分钟)`;
+    // 移除原有的 li 元素
+    const currentTask = getTaskFromLi(li); // 获取任务信息
+    removeTaskFromStorage(currentTask); // 从存储中移除
+    li.remove(); // 在界面上移除
+
+    addTaskToList(task); // 添加新的 li 元素
+    saveTask(task); // 更新存储
 }
 
-function getColorByPriority(dotClass) {
-    switch (dotClass) {
+function getTaskFromLi(li) {
+    const taskMatch = li.innerText.match(/^(.*)\s\((\d+)\s分钟\)$/);
+    return {
+        name: taskMatch[1],
+        time: parseInt(taskMatch[2]),
+        priority: getPriorityFromDotColor(li.querySelector('.dot').style.backgroundColor),
+    };
+}
+
+function getTaskListId(time) {
+    return time <= 5 ? 'tasks5MinList' :
+           time <= 10 ? 'tasks10MinList' :
+           time <= 60 ? 'tasks1HourList' : 'tasksOver1HourList';
+}
+
+function getPriorityByIdx(idx) {
+    const priorities = ['red', 'yellow', 'green', 'blue'];
+    return priorities[idx];
+}
+
+function getColorByPriority(priority) {
+    switch (priority) {
         case 'red': return '#ff4500';
         case 'yellow': return '#ffd700';
         case 'green': return '#32cd32';
@@ -114,15 +134,27 @@ function getColorByPriority(dotClass) {
 
 function saveTask(task) {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    localStorage.setItem('tasks', JSON.stringify([...tasks, task]));
+    const existingTaskIndex = tasks.findIndex(t => t.name === task.name && t.time === task.time);
+    
+    if (existingTaskIndex !== -1) {
+        // 如果任务已经存在，更新它
+        tasks[existingTaskIndex] = task;
+    } else {
+        // 添加新任务
+        tasks.push(task);
+    }
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 function removeTaskFromStorage(task) {
-    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    localStorage.setItem('tasks', JSON.stringify(tasks.filter(t => t.name !== task.name || t.time !== task.time)));
+    let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    tasks = tasks.filter(t => !(t.name === task.name && t.time === task.time));
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 function loadTasks() {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    tasks.forEach(addTaskToList);
+    tasks.forEach(task => {
+        addTaskToList(task);
+    });
 }
