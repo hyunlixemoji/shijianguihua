@@ -8,7 +8,7 @@ body {
 .container, .quadrant-container {
     display: flex; 
     justify-content: center; 
-    align-items: center; 
+    align-items: stretch; /* 尽可能拉伸对齐 */
     flex-wrap: wrap;
 }
 
@@ -63,6 +63,10 @@ button:hover {
     width: calc(45% - 20px); 
     min-height: 180px; 
     padding: 10px; 
+    display: flex;                   /* 设置成flex布局 */
+    flex-direction: column;         /* 垂直排列 */
+    justify-content: space-between; /* 确保内容均匀分布 */
+    border-radius: 15px;           /* 圆角 */
 }
 
 #q1 { 
@@ -117,12 +121,6 @@ li {
     button { width: 50px; height: 50px; }
     .quadrant { width: 100%; margin: 10px 0; }
     .quadrant-container { flex-direction: column; }
-}
-
-#priorityPrompt { 
-    position: absolute; 
-    left: 50%; 
-    transform: translateX(-50%); 
 }
 
 .priority-button { 
