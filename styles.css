@@ -2,13 +2,13 @@ body {
     font-family: Arial, sans-serif;
     margin: 20px;
     background: url('龟兔赛跑.png') repeat;
-    background-size: 10%; /* 将背景图缩小为10% */
+    background-size: 10%;
 }
 
 .container, .quadrant-container {
     display: flex; 
     justify-content: center; 
-    align-items: stretch; /* 尽可能拉伸对齐 */
+    align-items: stretch; 
     flex-wrap: wrap;
 }
 
@@ -63,10 +63,10 @@ button:hover {
     width: calc(45% - 20px); 
     min-height: 180px; 
     padding: 10px; 
-    display: flex;                   /* 设置成flex布局 */
-    flex-direction: column;         /* 垂直排列 */
-    justify-content: space-between; /* 确保内容均匀分布 */
-    border-radius: 15px;           /* 圆角 */
+    display: flex;                   
+    flex-direction: column;         
+    justify-content: flex-start; /* 将内容向顶部对齐 */
+    border-radius: 15px;           
 }
 
 #q1 { 
@@ -88,15 +88,15 @@ button:hover {
 ul { 
     list-style: none; 
     padding: 0; 
+    margin-top: 5%; /* 增加上边距使待办事项与标题保持5%的间距 */
 }
 
-/* 修改: li使用flex布局支持自动换行 */
 li { 
     cursor: pointer; 
     margin: 5px 0; 
-    display: block; /* 使用block布局以支持换行 */
-    word-wrap: break-word; /* 允许后内容断行 */
-    max-width: 100%; /* 确保待办事项自动换行 */
+    display: block; 
+    word-wrap: break-word; 
+    max-width: 100%; 
 }
 
 .dot { 
