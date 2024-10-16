@@ -15,9 +15,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const name = document.getElementById('editTaskName').value;
         const time = parseInt(document.getElementById('editTaskTime').value);
         const priority = document.getElementById('editTaskPriority').value;
+        const isDaily = document.getElementById('editTaskDaily').value === "yes";
 
         if (name && !isNaN(time) && ['red', 'yellow', 'green', 'blue'].includes(priority)) {
-            updateTask(currentLi, { name, time, priority });
+            updateTask(currentLi, { name, time, priority, isDaily });
             closeEditPrompt();
         } else {
             alert('请填写有效的信息');
@@ -25,6 +26,10 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     document.getElementById('cancelEditButton').onclick = closeEditPrompt;
+
+    // 每天重置日常任务
+    setInterval(resetDailyTasks, 24 * 60 * 60 * 1000); // 每天检查
+    resetDailyTasks(); // 页面加载时也检查
 });
 
 let currentLi; 
@@ -35,12 +40,14 @@ function closeEditPrompt() {
 
 function showEditPrompt(li) {
     currentLi = li; 
-    document.getElementById('editTaskName').value = li.innerText.split(' (')[0]; 
-    document.getElementById('editTaskTime').value = parseInt(li.innerText.match(/\((\d+) 分钟\)/)[1]); 
-
+    const task = getTaskFromLi(li); 
+    document.getElementById('editTaskName').value = task.name; 
+    document.getElementById('editTaskTime').value = task.time; 
     const dot = li.querySelector('.dot');
     const priority = getPriorityFromDotColor(dot.style.backgroundColor);
     document.getElementById('editTaskPriority').value = priority; 
+    document.getElementById('editTaskDaily').value = task.isDaily ? 'yes' : 'no'; 
+
     document.getElementById('editTaskPrompt').style.display = 'block'; 
 }
 
@@ -59,7 +66,7 @@ function showPriorityPrompt(taskInput, timeInput) {
     priorityButtons.forEach((button, idx) => {
         button.onclick = (() => {
             const priority = getPriorityByIdx(idx);
-            const task = { name: taskInput, time: timeInput, priority };
+            const task = { name: taskInput, time: timeInput, priority, isDaily: false }; // 默认不设置为日常任务
             addTaskToList(task);
             saveTask(task);
             document.getElementById('taskInput').value = '';
@@ -74,6 +81,10 @@ function addTaskToList(task) {
     const li = document.createElement('li');
     li.innerHTML = `<span class="dot" style="background-color: ${getColorByPriority(task.priority)};"></span>${task.name} (${task.time} 分钟)`;
     
+    if (task.isDaily) {
+        li.classList.add('daily-task'); // 添加日常任务样式
+    }
+
     li.oncontextmenu = (event) => {
         event.preventDefault(); 
         showEditPrompt(li); 
@@ -93,13 +104,11 @@ function addTaskToList(task) {
 }
 
 function updateTask(li, task) {
-    // 移除原有的 li 元素
-    const currentTask = getTaskFromLi(li); // 获取任务信息
-    removeTaskFromStorage(currentTask); // 从存储中移除
-    li.remove(); // 在界面上移除
-
-    addTaskToList(task); // 添加新的 li 元素
-    saveTask(task); // 更新存储
+    const currentTask = getTaskFromLi(li); 
+    removeTaskFromStorage(currentTask); 
+    li.remove(); 
+    addTaskToList(task);
+    saveTask(task); 
 }
 
 function getTaskFromLi(li) {
@@ -108,6 +117,7 @@ function getTaskFromLi(li) {
         name: taskMatch[1],
         time: parseInt(taskMatch[2]),
         priority: getPriorityFromDotColor(li.querySelector('.dot').style.backgroundColor),
+        isDaily: li.classList.contains('daily-task')  // 添加日常任务的判断
     };
 }
 
@@ -137,11 +147,9 @@ function saveTask(task) {
     const existingTaskIndex = tasks.findIndex(t => t.name === task.name && t.time === task.time);
     
     if (existingTaskIndex !== -1) {
-        // 如果任务已经存在，更新它
-        tasks[existingTaskIndex] = task;
+        tasks[existingTaskIndex] = task; // 更新任务
     } else {
-        // 添加新任务
-        tasks.push(task);
+        tasks.push(task); // 添加新任务
     }
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
@@ -155,6 +163,22 @@ function removeTaskFromStorage(task) {
 function loadTasks() {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     tasks.forEach(task => {
+        addTaskToList(task);
+    });
+}
+
+function resetDailyTasks() {
+    const today = new Date().toISOString().split('T')[0];
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const dailyTasks = tasks.filter(task => task.isDaily);
+
+    // 先清空当前列表然后再添加日常任务
+    document.getElementById('tasks5MinList').innerHTML = '';
+    document.getElementById('tasks10MinList').innerHTML = '';
+    document.getElementById('tasks1HourList').innerHTML = '';
+    document.getElementById('tasksOver1HourList').innerHTML = '';
+
+    dailyTasks.forEach(task => {
         addTaskToList(task);
     });
 }
