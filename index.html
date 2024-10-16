@@ -6,12 +6,13 @@
     <title>小菜の时间规划器</title>
     <link rel="stylesheet" href="styles.css">
     <style>
+        /* 样式保持不变 */
         .dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 5px; }
         #priorityPrompt { display: none; position: absolute; background: white; border: 1px solid #ccc; padding: 10px; width: 300px; text-align: center; z-index: 100; left: 50%; transform: translateX(-50%); }
         .container, .quadrant { margin: 10px 0; }
         .title-image { width: 60px; }
         li { word-wrap: break-word; max-width: 100%; }
-        .daily-task { border: 2px solid black; border-radius: 10px; padding: 5px; margin: 5px 0; }
+        .daily-task { border: 2px solid black; border-radius: 10px; } /* 添加日常任务样式 */
     </style>
 </head>
 <body>
@@ -33,12 +34,14 @@
             <button class="priority-button blue" id="priority4">不重要不紧急</button>
         </div>
     </div>
+
     <div class="quadrant-container">
         <div class="quadrant" id="q1"><h3>5分钟</h3><ul id="tasks5MinList"></ul></div>
         <div class="quadrant" id="q3"><h3>10分钟</h3><ul id="tasks10MinList"></ul></div>
         <div class="quadrant" id="q2"><h3>1小时</h3><ul id="tasks1HourList"></ul></div>
         <div class="quadrant" id="q4"><h3>1小时以上</h3><ul id="tasksOver1HourList"></ul></div>
     </div>
+
     <div id="editTaskPrompt" style="display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); background:#fff; border:1px solid #ccc; padding:20px; z-index:150;">
         <h4>修改任务</h4>
         <input type="text" id="editTaskName" placeholder="内容" />
@@ -49,14 +52,12 @@
             <option value="green">不重要紧急</option>
             <option value="blue">不重要不紧急</option>
         </select>
-        <select id="editTaskDaily">
-            <option value="no">是否设置为日常任务</option>
-            <option value="yes">是</option>
-            <option value="no">否</option>
-        </select>
+        <label>
+            <input type="checkbox" id="isDailyTask"> 设置为日常任务
+        </label>
         <button id="saveEditButton">保存</button>
         <button id="cancelEditButton">取消</button>
-    </div>
+    </div> 
     <script src="script.js"></script>
 </body>
 </html>
