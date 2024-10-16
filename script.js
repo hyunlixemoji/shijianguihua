@@ -32,23 +32,23 @@ document.addEventListener('DOMContentLoaded', () => {
     resetDailyTasks(); // 页面加载时也检查
 });
 
-let currentLi; 
+let currentLi;
 
 function closeEditPrompt() {
     document.getElementById('editTaskPrompt').style.display = 'none';
 }
 
 function showEditPrompt(li) {
-    currentLi = li; 
-    const task = getTaskFromLi(li); 
-    document.getElementById('editTaskName').value = task.name; 
-    document.getElementById('editTaskTime').value = task.time; 
+    currentLi = li;
+    const task = getTaskFromLi(li);
+    document.getElementById('editTaskName').value = task.name;
+    document.getElementById('editTaskTime').value = task.time;
     const dot = li.querySelector('.dot');
     const priority = getPriorityFromDotColor(dot.style.backgroundColor);
-    document.getElementById('editTaskPriority').value = priority; 
-    document.getElementById('editTaskDaily').value = task.isDaily ? 'yes' : 'no'; 
+    document.getElementById('editTaskPriority').value = priority;
+    document.getElementById('editTaskDaily').value = task.isDaily ? 'yes' : 'no';
 
-    document.getElementById('editTaskPrompt').style.display = 'block'; 
+    document.getElementById('editTaskPrompt').style.display = 'block';
 }
 
 function getPriorityFromDotColor(color) {
@@ -90,22 +90,38 @@ function addTaskToList(task) {
         showEditPrompt(li); 
     };
 
-    li.onclick = (event) => {
-        if (event.detail === 2) { 
-            li.style.textDecoration = 'line-through';
-            setTimeout(() => {
-                li.remove();
-                removeTaskFromStorage(task);
-            }, 2000);
+    li.ondblclick = (event) => {
+        if (!task.isDaily) {
+            removeTask(task); // 非日常任务直接移除
+        } else {
+            li.style.display = 'none'; // 隐藏日常任务
+            markTaskAsRemoved(task); // 标记日常任务为隐藏
         }
     };
 
     document.getElementById(listId).appendChild(li);
 }
 
+function markTaskAsRemoved(task) {
+    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const taskToUpdate = tasks.find(t => t.name === task.name && t.time === task.time);
+    if (taskToUpdate) {
+        taskToUpdate.hidden = true; // 增加 hidden 属性表示已被隐藏
+        localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+}
+
+function removeTask(task) {
+    removeTaskFromStorage(task); // 从存储中移除非日常任务
+    const listItem = Array.from(document.querySelectorAll('li')).find(li => li.innerText.includes(task.name) && li.innerText.includes(`${task.time} 分钟`));
+    if (listItem) listItem.remove();
+}
+
 function updateTask(li, task) {
     const currentTask = getTaskFromLi(li); 
-    removeTaskFromStorage(currentTask); 
+    if (!currentTask.isDaily) {
+        removeTaskFromStorage(currentTask); 
+    } // 对非日常任务做处理
     li.remove(); 
     addTaskToList(task);
     saveTask(task); 
@@ -117,7 +133,8 @@ function getTaskFromLi(li) {
         name: taskMatch[1],
         time: parseInt(taskMatch[2]),
         priority: getPriorityFromDotColor(li.querySelector('.dot').style.backgroundColor),
-        isDaily: li.classList.contains('daily-task')  // 添加日常任务的判断
+        isDaily: li.classList.contains('daily-task'),  // 判断是否为日常任务
+        hidden: li.style.display === 'none'  // 判断当前任务是否被隐藏
     };
 }
 
@@ -163,22 +180,30 @@ function removeTaskFromStorage(task) {
 function loadTasks() {
     const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     tasks.forEach(task => {
-        addTaskToList(task);
+        if (!task.hidden) { // 只加载未被隐藏的任务
+            addTaskToList(task);
+        }
     });
 }
 
 function resetDailyTasks() {
-    const today = new Date().toISOString().split('T')[0];
-    const tasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    const dailyTasks = tasks.filter(task => task.isDaily);
+    const dailyTasks = JSON.parse(localStorage.getItem('tasks')) || [];
+    const currentDate = new Date().toISOString().slice(0, 10); // 获取当前日期
+    const tasksContainer = {
+        5: document.getElementById('tasks5MinList'),
+        10: document.getElementById('tasks10MinList'),
+        60: document.getElementById('tasks1HourList'),
+        10000: document.getElementById('tasksOver1HourList'),
+    };
 
-    // 先清空当前列表然后再添加日常任务
-    document.getElementById('tasks5MinList').innerHTML = '';
-    document.getElementById('tasks10MinList').innerHTML = '';
-    document.getElementById('tasks1HourList').innerHTML = '';
-    document.getElementById('tasksOver1HourList').innerHTML = '';
+    // 清空任务列表
+    for (const key in tasksContainer) {
+        tasksContainer[key].innerHTML = '';
+    }
 
     dailyTasks.forEach(task => {
-        addTaskToList(task);
+        if (task.isDaily && !task.hidden) { // 判断日常任务且未被隐藏
+            addTaskToList(task);
+        }
     });
 }
