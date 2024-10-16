@@ -12,6 +12,7 @@
         .container, .quadrant { margin: 10px 0; }
         .title-image { width: 60px; }
         li { word-wrap: break-word; max-width: 100%; }
+        .daily-task { border: 2px solid black; border-radius: 10px; padding: 5px; margin: 5px 0; } /* 新增日常任务样式 */
     </style>
 </head>
 <body>
@@ -50,6 +51,11 @@
             <option value="yellow">重要不紧急</option>
             <option value="green">不重要紧急</option>
             <option value="blue">不重要不紧急</option>
+        </select>
+        <select id="editTaskDaily">
+            <option value="no">是否设置为日常任务</option>
+            <option value="yes">是</option>
+            <option value="no">否</option>
         </select>
         <button id="saveEditButton">保存</button>
         <button id="cancelEditButton">取消</button>
