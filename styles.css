@@ -17,7 +17,6 @@ body {
     justify-content: center; 
     align-items: center; 
     margin-top: 50px; 
-    flex-wrap: nowrap;
 }
 
 #title {
@@ -26,7 +25,6 @@ body {
     margin: 0; 
     padding-right: 5px; 
     font-size: 2em; 
-    white-space: nowrap; 
 }
 
 input { 
@@ -49,9 +47,7 @@ button {
     border: none; 
 }
 
-button:hover { 
-    background-color: #ff69b4; 
-}
+button:hover { background-color: #ff69b4; }
 
 .quadrant-container { 
     min-height: 400px; 
@@ -63,54 +59,37 @@ button:hover {
     width: calc(45% - 20px); 
     min-height: 180px; 
     padding: 10px; 
-    display: flex;                   
-    flex-direction: column;         
-    justify-content: flex-start; /* 将内容向顶部对齐 */
-    border-radius: 15px;           
+    display: flex; 
+    flex-direction: column; 
+    justify-content: flex-start; 
+    border-radius: 15px; 
 }
 
-#q1 { 
-    background-color: #ffe4e1; 
-}
-
-#q2 { 
-    background-color: #e6e6fa; 
-}
-
-#q3 { 
-    background-color: #f0e68c; 
-}
-
-#q4 { 
-    background-color: #add8e6; 
-}
+#q1 { background-color: #ffe4e1; }
+#q2 { background-color: #e6e6fa; }
+#q3 { background-color: #f0e68c; }
+#q4 { background-color: #add8e6; }
 
 ul { 
     list-style: none; 
     padding: 0; 
-    margin-top: 5%; /* 增加上边距使待办事项与标题保持5%的间距 */
+    margin-top: 5%; 
 }
 
 li { 
     cursor: pointer; 
     margin: 5px 0; 
     display: block; 
-    word-wrap: break-word; 
-    max-width: 100%; 
 }
 
-.dot { 
-    margin-right: 10px; 
-}
+.dot { margin-right: 10px; }
 
 #tasks5MinList { color: #FFA07A; }
 #tasks10MinList { color: #FFA500; }
 #tasks1HourList { color: #FF6347; }
 #tasksOver1HourList { color: #C71585; }
 
-.quadrant h3 { 
-    margin-top: 5px; 
-}
+.quadrant h3 { margin-top: 5px; }
 
 @media (max-width: 600px) {
     body { margin: 10px; }
@@ -140,6 +119,4 @@ li {
 .priority-button.green { background-color: #32cd32; }
 .priority-button.blue { background-color: #4682b4; }
 
-.priority-button:hover { 
-    opacity: 0.8; 
-}
+.priority-button:hover { opacity: 0.8; }
