@@ -63,10 +63,10 @@ button:hover {
     width: calc(45% - 20px); 
     min-height: 180px; 
     padding: 10px; 
-    display: flex;                   /* 设置成flex布局 */
-    flex-direction: column;         /* 垂直排列 */
-    justify-content: space-between; /* 确保内容均匀分布 */
-    border-radius: 15px;           /* 圆角 */
+    display: flex;                   
+    flex-direction: column;         
+    justify-content: space-between; 
+    border-radius: 15px;           
 }
 
 #q1 { 
@@ -90,13 +90,12 @@ ul {
     padding: 0; 
 }
 
-/* 修改: li使用flex布局支持自动换行 */
 li { 
     cursor: pointer; 
     margin: 5px 0; 
-    display: block; /* 使用block布局以支持换行 */
-    word-wrap: break-word; /* 允许后内容断行 */
-    max-width: 100%; /* 确保待办事项自动换行 */
+    display: block; 
+    word-wrap: break-word; 
+    max-width: 100%; 
 }
 
 .dot { 
@@ -142,4 +141,40 @@ li {
 
 .priority-button:hover { 
     opacity: 0.8; 
+}
+
+/* 新增修改界面的样式 */
+#editTaskPrompt {
+    background-color: #fff8e1; /* 奶白色 */
+    border-radius: 10px; 
+    padding: 20px;
+    text-align: center; /* 内容水平居中 */
+}
+
+#editTaskPrompt h4 {
+    font-size: 1.8em; /* 放大字体 */
+    color: #e6e6fa; /* 浅紫色 */
+    text-shadow: 1px 1px 0 #4b0082; /* 深紫色阴影 */
+    margin-bottom: 20px; /* 增加下边距 */
+}
+
+#editTaskPrompt input, 
+#editTaskPrompt select {
+    display: block; /* 让每个输入框单独占一行 */
+    margin: 10px auto; /* 水平居中 */
+    width: calc(100% - 20px); /* 确保宽度适合 */
+}
+
+.daily-task-label {
+    display: flex; /* 使用flex布局 */
+    justify-content: center; /* 水平居中 */
+    align-items: center; /* 垂直居中 */
+    margin: 10px 0; /* 添加上下间距 */
+}
+
+#editTaskPrompt button {
+    width: 60px; /* 确保按钮为正圆形 */
+    height: 60px; 
+    border-radius: 50%; /* 正圆形 */
+    margin: 10px auto; /* 水平居中 */
 }
