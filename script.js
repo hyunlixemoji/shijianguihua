@@ -14,11 +14,12 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('saveEditButton').onclick = () => {
         const name = document.getElementById('editTaskName').value;
         const time = parseInt(document.getElementById('editTaskTime').value);
+        const count = parseInt(document.getElementById('editTaskCount').value);
         const priority = document.getElementById('editTaskPriority').value;
-        const isDaily = document.getElementById('isDailyTask').checked; // 获取复选框状态
+        const isDaily = document.getElementById('isDailyTask').checked;
 
-        if (name && !isNaN(time) && ['red', 'yellow', 'green', 'blue'].includes(priority)) {
-            updateTask(currentLi, { name, time, priority, isDaily });
+        if (name && !isNaN(time) && !isNaN(count) && ['red', 'yellow', 'green', 'blue'].includes(priority)) {
+            updateTask(currentLi, { name, time, priority, isDaily, count });
             closeEditPrompt();
         } else {
             alert('请填写有效的信息');
@@ -28,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('cancelEditButton').onclick = closeEditPrompt;
 });
 
-let currentLi; 
+let currentLi;
 
 function closeEditPrompt() {
     document.getElementById('editTaskPrompt').style.display = 'none';
@@ -43,8 +44,11 @@ function showEditPrompt(li) {
     const priority = getPriorityFromDotColor(dot.style.backgroundColor);
     document.getElementById('editTaskPriority').value = priority; 
 
-    const isDaily = li.classList.contains('daily-task'); // 检查是否为日常任务
-    document.getElementById('isDailyTask').checked = isDaily; // 设置复选框状态
+    const isDaily = li.classList.contains('daily-task'); 
+    document.getElementById('isDailyTask').checked = isDaily; 
+
+    const countMatch = li.innerText.match(/x(\d+)/);
+    document.getElementById('editTaskCount').value = countMatch ? countMatch[1] : 1;
 
     document.getElementById('editTaskPrompt').style.display = 'block'; 
 }
@@ -64,7 +68,7 @@ function showPriorityPrompt(taskInput, timeInput) {
     priorityButtons.forEach((button, idx) => {
         button.onclick = (() => {
             const priority = getPriorityByIdx(idx);
-            const task = { name: taskInput, time: timeInput, priority, isDaily: false }; // 默认非日常任务
+            const task = { name: taskInput, time: timeInput, priority, isDaily: false, count: 1 }; 
             addTaskToList(task);
             saveTask(task);
             document.getElementById('taskInput').value = '';
@@ -77,9 +81,9 @@ function showPriorityPrompt(taskInput, timeInput) {
 function addTaskToList(task) {
     const listId = getTaskListId(task.time);
     const li = document.createElement('li');
-    li.innerHTML = `<span class="dot" style="background-color: ${getColorByPriority(task.priority)};"></span>${task.name} (${task.time} 分钟)`;
-    
-    if (task.isDaily) { // 如果是日常任务，添加样式
+    li.innerHTML = `<span class="dot" style="background-color: ${getColorByPriority(task.priority)};"></span>${task.name} (${task.time} 分钟) x${task.count}`;
+
+    if (task.isDaily) {
         li.classList.add('daily-task');
     }
 
@@ -88,41 +92,43 @@ function addTaskToList(task) {
         showEditPrompt(li); 
     };
 
-    li.onclick = (event) => {
-        if (event.detail === 2) { 
-            li.style.textDecoration = 'line-through';
-            setTimeout(() => {
-                if (task.isDaily) {
-                    li.remove();
-                    removeTaskFromStorage(task);
-                } else {
-                    li.remove();
-                    removeTaskFromStorage(task);
-                }
-            }, 2000);
-        }
+    li.ondblclick = (event) => {
+        handleTaskCompletion(li, task);
     };
 
     document.getElementById(listId).appendChild(li);
 }
 
-function updateTask(li, task) {
-    // 移除原有的 li 元素
-    const currentTask = getTaskFromLi(li); // 获取任务信息
-    removeTaskFromStorage(currentTask); // 从存储中移除
-    li.remove(); // 在界面上移除
+function handleTaskCompletion(li, task) {
+    if (task.count > 0) {
+        task.count--;
+        li.innerHTML = li.innerHTML.replace(/x(\d+)/, `x${task.count}`);
+        saveTask(task); // 更新本地存储
+    }
 
-    addTaskToList(task); // 添加新的 li 元素
-    saveTask(task); // 更新存储
+    if (task.count === 0) {
+        li.remove();
+        removeTaskFromStorage(task);
+    }
+}
+
+function updateTask(li, task) {
+    const currentTask = getTaskFromLi(li); 
+    removeTaskFromStorage(currentTask); 
+    li.remove(); 
+
+    addTaskToList(task); 
+    saveTask(task); 
 }
 
 function getTaskFromLi(li) {
-    const taskMatch = li.innerText.match(/^(.*)\s\((\d+)\s分钟\)$/);
+    const taskMatch = li.innerText.match(/^(.*)\s\((\d+)\s分钟\)\s*x(\d+)$/);
     return {
         name: taskMatch[1],
         time: parseInt(taskMatch[2]),
         priority: getPriorityFromDotColor(li.querySelector('.dot').style.backgroundColor),
-        isDaily: li.classList.contains('daily-task') // 检查是否为日常任务
+        isDaily: li.classList.contains('daily-task'),
+        count: parseInt(taskMatch[3])
     };
 }
 
@@ -152,11 +158,9 @@ function saveTask(task) {
     const existingTaskIndex = tasks.findIndex(t => t.name === task.name && t.time === task.time);
     
     if (existingTaskIndex !== -1) {
-        // 如果任务已经存在，更新它
-        tasks[existingTaskIndex] = task;
+        tasks[existingTaskIndex] = task; // 更新任务
     } else {
-        // 添加新任务
-        tasks.push(task);
+        tasks.push(task); // 添加新任务
     }
     localStorage.setItem('tasks', JSON.stringify(tasks));
 }
